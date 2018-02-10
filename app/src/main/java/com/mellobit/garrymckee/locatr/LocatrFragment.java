@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,9 @@ public class LocatrFragment extends Fragment {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
     private static final int REQUEST_LOCATION_PERMISSIONS = 0;
+    private static final int REQUEST_ON_DISMISS_DIALOG = 1;
+
+    private static final String DIALOG_PERMISSIONS = "dialogPermissions";
 
     private ImageView mImageView;
     private GoogleApiClient mClient;
@@ -130,7 +134,16 @@ public class LocatrFragment extends Fragment {
                 if(hasLocationPermission()) {
                     findImage();
                 } else {
-                    requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS);
+                    if(shouldShowRequestPermissionRationale(LOCATION_PERMISSIONS[0])) {
+                        FragmentManager manager = getFragmentManager();
+                        LocatrDialogFragment locatrDialogFragment = new LocatrDialogFragment();
+                        locatrDialogFragment.setTargetFragment(this, REQUEST_ON_DISMISS_DIALOG);
+                        locatrDialogFragment.show(manager, DIALOG_PERMISSIONS);
+
+                    } else {
+                        requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS);
+                    }
+
                 }
 
                 return true;
@@ -183,5 +196,9 @@ public class LocatrFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             mImageView.setImageBitmap(mBitmap);
         }
+    }
+
+    public void requestDialogPermissions() {
+        requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS);
     }
 }
