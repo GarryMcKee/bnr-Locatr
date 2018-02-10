@@ -1,5 +1,6 @@
 package com.mellobit.garrymckee.locatr;
 
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
@@ -74,6 +75,11 @@ public class FlikrFetcher {
         return downloadGalleryItems(url);
     }
 
+    public List<GalleryItem> searchPhotos(Location location) {
+        String uri = buildUrl(location);
+        return downloadGalleryItems(uri);
+    }
+
     public List<GalleryItem> downloadGalleryItems(String url) {
 
         List<GalleryItem> items = new ArrayList<>();
@@ -100,6 +106,14 @@ public class FlikrFetcher {
         }
 
         return uriBuilder.build().toString();
+    }
+
+    private String buildUrl(Location locaton) {
+        return ENDPOINT.buildUpon()
+                .appendQueryParameter("method", SEARCH_METHOD)
+                .appendQueryParameter("lat", "" + locaton.getLatitude())
+                .appendQueryParameter("lon", "" + locaton.getLongitude())
+                .build().toString();
     }
 
     private void parseItems(List<GalleryItem> items, JSONObject jsonBody) throws JSONException {
