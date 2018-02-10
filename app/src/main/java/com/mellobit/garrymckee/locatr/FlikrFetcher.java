@@ -108,11 +108,11 @@ public class FlikrFetcher {
         return uriBuilder.build().toString();
     }
 
-    private String buildUrl(Location locaton) {
+    private String buildUrl(Location location) {
         return ENDPOINT.buildUpon()
                 .appendQueryParameter("method", SEARCH_METHOD)
-                .appendQueryParameter("lat", "" + locaton.getLatitude())
-                .appendQueryParameter("lon", "" + locaton.getLongitude())
+                .appendQueryParameter("lat", "" + location.getLatitude())
+                .appendQueryParameter("lon", "" + location.getLongitude())
                 .build().toString();
     }
 
