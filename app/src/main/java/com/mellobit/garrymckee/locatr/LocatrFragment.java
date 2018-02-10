@@ -166,7 +166,8 @@ public class LocatrFragment extends Fragment {
                 return null;
             }
 
-            mGalleryItem = items.get(0);
+            int index = (int) (Math.random() * items.size() -1);
+            mGalleryItem = items.get(index);
 
             try {
                 byte[] bytes = fetcher.getUrlBytes(mGalleryItem.getUrl());
